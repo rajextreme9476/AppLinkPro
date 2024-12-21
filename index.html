@@ -9,25 +9,23 @@
             const appScheme = "HdfcNowApp://"; // Custom app scheme
             const appStoreURL = "https://apps.apple.com/in/app/hdfc-bank-app-invite-only/id6504402552";
 
-            // Create a hidden iframe to open the app
+            // Create a hidden iframe to try opening the app
             const iframe = document.createElement("iframe");
             iframe.style.display = "none";
             iframe.src = appScheme;
             document.body.appendChild(iframe);
 
-            // Set a timeout for fallback to App Store
+            // Set a timeout to redirect to App Store after 2 seconds if the app doesn't open
             const timeout = setTimeout(function() {
-                // Fallback to App Store after 2 seconds
-                window.location.href = appStoreURL;
+                window.location.href = appStoreURL; // Redirect to App Store
             }, 2000);
 
-            // Attempt to open the app by setting window.location.href
-            // This will immediately try to open the app on supported platforms
+            // Try opening the app via window.location.href immediately
             window.location.href = appScheme;
 
-            // Detect if the app was opened (pagehide event triggers when the app is launched)
+            // Detect if the app has been opened and cancel the timeout
             window.addEventListener("pagehide", function() {
-                clearTimeout(timeout); // Cancel the fallback if app is opened
+                clearTimeout(timeout); // Cancel the App Store redirection if app is opened
             });
         }
 
