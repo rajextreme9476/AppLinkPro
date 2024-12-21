@@ -1,25 +1,20 @@
+<!DOCTYPE html>
 <html>
 <head>
     <title>Open HDFC Bank App</title>
     <script>
         function openApp() {
-            const appScheme = "HdfcNowApp://"; // Your custom app schema
+            const appScheme = "HdfcNowApp://"; // Your custom app scheme
             const appStoreURL = "https://apps.apple.com/in/app/hdfc-bank-app-invite-only/id6504402552";
 
-            // Start the process of opening the app
+            // Attempt to open the app
             const startTime = new Date().getTime();
+            window.location.href = appScheme;
 
-            // Create an invisible iframe to attempt opening the app
-            const iframe = document.createElement("iframe");
-            iframe.style.display = "none";
-            iframe.src = appScheme;
-            document.body.appendChild(iframe);
-
-            // Check after 1.5 seconds if the app opened or fallback to the App Store
-            setTimeout(function () {
+            // Fallback to App Store after a delay
+            setTimeout(() => {
                 const elapsedTime = new Date().getTime() - startTime;
-
-                // If time elapsed is too short, assume app did not open
+                // If time elapsed is too short, assume the app did not open
                 if (elapsedTime < 1500) {
                     window.location.href = appStoreURL;
                 }
@@ -27,10 +22,15 @@
         }
 
         // Call the function when the page loads
-        window.onload = openApp;
+        window.onload = () => {
+            const userConfirmed = confirm("Do you have the HDFC Bank app installed? Click OK to open it.");
+            if (userConfirmed) {
+                openApp();
+            }
+        };
     </script>
 </head>
 <body>
-    <p>TEST RX, <a href="https://apps.apple.com/in/app/hdfc-bank-app-invite-only/id6504402552">click here</a>.</p>
+    <p>If the app doesn’t open, <a href="https://apps.apple.com/in/app/hdfc-bank-app-invite-only/id6504402552">click here to download it.</a></p>
 </body>
 </html>
