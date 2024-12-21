@@ -6,30 +6,38 @@
     <title>Open HDFC Bank App</title>
     <script>
         function openApp() {
-            const appScheme = "HdfcNowApp://"; // Custom app scheme
+            const appScheme = "HdfcNowApp://"; // Custom app scheme for HDFC Bank app
             const appStoreURL = "https://apps.apple.com/in/app/hdfc-bank-app-invite-only/id6504402552";
 
-            // Create a hidden iframe to try opening the app
+            // Create a hidden iframe element to try opening the app
             const iframe = document.createElement("iframe");
             iframe.style.display = "none";
             iframe.src = appScheme;
             document.body.appendChild(iframe);
 
-            // Set a timeout to redirect to App Store after 2 seconds if the app doesn't open
+            // Set a flag to track if the app was opened
+            let appOpened = false;
+
+            // Timeout function to trigger the fallback to App Store if the app does not open within 2 seconds
             const timeout = setTimeout(function() {
-                window.location.href = appStoreURL; // Redirect to App Store
+                if (!appOpened) {
+                    window.location.href = appStoreURL; // Redirect to App Store if the app is not opened
+                }
             }, 2000);
 
-            // Try opening the app via window.location.href immediately
+            // Try to open the app by changing window.location.href
             window.location.href = appScheme;
 
-            // Detect if the app has been opened and cancel the timeout
-            window.addEventListener("pagehide", function() {
-                clearTimeout(timeout); // Cancel the App Store redirection if app is opened
+            // Use a page visibility change event to detect if the app was opened
+            document.addEventListener("visibilitychange", function() {
+                if (document.visibilityState === "hidden") {
+                    appOpened = true;
+                    clearTimeout(timeout); // Stop the fallback if the app was opened
+                }
             });
         }
 
-        window.onload = openApp;
+        window.onload = openApp; // Call the function when the page loads
     </script>
 </head>
 <body>
