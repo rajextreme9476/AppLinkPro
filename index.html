@@ -6,38 +6,39 @@
     <title>Open HDFC Bank App</title>
     <script>
         function openApp() {
-            const appScheme = "HdfcNowApp://"; // Your custom app scheme
+            const appScheme = "HdfcNowApp://"; // Custom app scheme
             const appStoreURL = "https://apps.apple.com/in/app/hdfc-bank-app-invite-only/id6504402552";
 
-            const startTime = new Date().getTime();
             let isAppOpened = false;
 
-            // Try to open the app
-            window.location.href = appScheme;
+            // Attempt to open the app
+            const startTime = new Date().getTime();
 
-            // Fallback to App Store after a delay
+            // Redirect to custom scheme
+            const deepLink = document.createElement("a");
+            deepLink.href = appScheme;
+            deepLink.click();
+
+            // Check if the app was opened after a delay
             setTimeout(() => {
                 const elapsedTime = new Date().getTime() - startTime;
 
-                // If elapsed time is too short, the app is likely not installed
+                // If the user has not switched to the app, redirect to the App Store
                 if (!isAppOpened && elapsedTime < 1500) {
                     window.location.href = appStoreURL;
                 }
             }, 1500);
 
-            // Handle user interaction with the browser
-            window.onblur = function () {
+            // Detect when the user switches away from the browser
+            window.addEventListener("pagehide", () => {
                 isAppOpened = true;
-            };
+            });
         }
 
-        // Call the function when the page loads
-        window.onload = () => {
-            openApp();
-        };
+        window.onload = () => openApp();
     </script>
 </head>
 <body>
-    <p>If the hdfc app doesn’t open, <a href="https://apps.apple.com/in/app/hdfc-bank-app-invite-only/id6504402552">click here to download it.</a></p>
+    <p>If the app doesn’t open, <a href="https://apps.apple.com/in/app/hdfc-bank-app-invite-only/id6504402552">click here to download it.</a></p>
 </body>
 </html>
