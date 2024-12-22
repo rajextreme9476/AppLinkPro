@@ -1,46 +1,27 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Open HDFC Bank App</title>
-    <script>
-        function openApp() {
-            const appScheme = "HdfcNowApp://"; // Custom app scheme for HDFC Bank app
-            const appStoreURL = "https://apps.apple.com/in/app/hdfc-bank-app-invite-only/id6504402552";
-
-            // Create a hidden iframe element to try opening the app
-            const iframe = document.createElement("iframe");
-            iframe.style.display = "none";
-            iframe.src = appScheme;
-            document.body.appendChild(iframe);
-
-            // Set a flag to track if the app was opened
-            let appOpened = false;
-
-            // Timeout function to trigger the fallback to App Store if the app does not open within 2 seconds
-            const timeout = setTimeout(function() {
-                if (!appOpened) {
-                    window.location.href = appStoreURL; // Redirect to App Store if the app is not opened
-                }
-            }, 2000);
-
-            // Try to open the app by changing window.location.href
-            window.location.href = appScheme;
-
-            // Use a page visibility change event to detect if the app was opened
-            document.addEventListener("visibilitychange", function() {
-                if (document.visibilityState === "hidden") {
-                    appOpened = true;
-                    clearTimeout(timeout); // Stop the fallback if the app was opened
-                }
-            });
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Open HDFC Bank App</title>
+  <script>
+    function canOpenApp() {
+      const appScheme = "HdfcNowApp://";
+      const iframe = document.createElement("iframe");
+      iframe.style.display = "none";
+      iframe.src = appScheme;
+      document.body.appendChild(iframe);
+      setTimeout(function() {
+        document.body.removeChild(iframe);
+        if (window.location.href !== appScheme) {
+          window.location.href = "https://apps.apple.com/in/app/hdfc-bank-app-invite-only/id6504402552";
         }
-
-        window.onload = openApp; // Call the function when the page loads
-    </script>
+      }, 2000);
+    }
+    window.onload = canOpenApp;
+  </script>
 </head>
 <body>
-    <p>If the app doesn’t open, <a href="https://apps.apple.com/in/app/hdfc-bank-app-invite-only/id6504402552">click here to download it.</a></p>
+  <p>If the app doesn't open automatically, <a href="https://apps.apple.com/in/app/hdfc-bank-app-invite-only/id6504402552">click here to download it.</a></p>
 </body>
 </html>
