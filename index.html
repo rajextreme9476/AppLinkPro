@@ -6,12 +6,15 @@
     <title>Open HDFC Bank App</title>
 </head>
 <body>
+    <button id="openAppButton">Open HDFC Bank App</button>
+    
     <script>
+        // This function attempts to open the app using the custom URL scheme
         function openApp() {
-            const appScheme = "HdfcNowApp://"; // Custom app URL scheme
+            const appScheme = "HdfcNowApp://"; // Your app's custom URL scheme
             const appStoreURL = "https://apps.apple.com/in/app/hdfc-bank-app-invite-only/id6504402552"; // App Store URL
 
-            const timeoutDuration = 3000; // Timeout for redirecting to App Store if the app is not opened
+            const timeoutDuration = 2000; // Timeout for redirecting to App Store if the app doesn't open
 
             let isAppOpened = false; // To track if the app was opened
             let timeout;
@@ -35,10 +38,8 @@
             window.location.href = appScheme;
         }
 
-        // Trigger the function to try to open the app when the page loads
-        window.onload = openApp;
+        // Add event listener for the button click
+        document.getElementById('openAppButton').addEventListener('click', openApp);
     </script>
-
-    <p>If the app does not open, <a href="https://apps.apple.com/in/app/hdfc-bank-app-invite-only/id6504402552">click here</a> to install it.</p>
 </body>
 </html>
