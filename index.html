@@ -6,8 +6,6 @@
     <title>Open HDFC Bank App</title>
 </head>
 <body>
-    <button id="openAppButton">Open HDFC Bank App</button>
-    
     <script>
         // This function attempts to open the app using the custom URL scheme
         function openApp() {
@@ -38,8 +36,8 @@
             window.location.href = appScheme;
         }
 
-        // Add event listener for the button click
-        document.getElementById('openAppButton').addEventListener('click', openApp);
+        // Trigger the app opening process immediately when the page loads
+        openApp();
     </script>
 </body>
 </html>
