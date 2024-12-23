@@ -1,27 +1,34 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Open HDFC Bank App</title>
-  <script>
-    function canOpenApp() {
-      const appScheme = "HdfcNowApp://";
-      const iframe = document.createElement("iframe");
-      iframe.style.display = "none";
-      iframe.src = appScheme;
-      document.body.appendChild(iframe);
-      setTimeout(function() {
-        document.body.removeChild(iframe);
-        if (window.location.href !== appScheme) {
-          window.location.href = "https://apps.apple.com/in/app/hdfc-bank-app-invite-only/id6504402552";
+    <title>Open HDFC Bank App</title>
+    <script>
+        function openApp() {
+            const appScheme = "HdfcNowApp://"; // Custom app schema
+            const appStoreURL = "https://apps.apple.com/in/app/hdfc-bank-app-invite-only/id6504402552";
+
+            // Attempt to open the app
+            const userAgent = navigator.userAgent || navigator.vendor || window.opera;
+
+            // Timer-based fallback logic
+            let timer = setTimeout(function () {
+                window.location.href = appStoreURL; // Redirect to App Store if the app doesn't open
+            }, 2000); // Adjust the delay if necessary
+
+            // Open app using custom schema
+            window.location.href = appScheme;
+
+            // If the app successfully opens, cancel the fallback timer
+            window.addEventListener("blur", function () {
+                clearTimeout(timer); // Clear fallback if the app launches
+            });
         }
-      }, 2000);
-    }
-    window.onload = canOpenApp;
-  </script>
+
+        // Trigger app open process when the page loads
+        window.onload = openApp;
+    </script>
 </head>
 <body>
-  <p>If the app doesn't open automatically, <a href="https://apps.apple.com/in/app/hdfc-bank-app-invite-only/id6504402552">click here to download it.</a></p>
+    <p>If you are not redirected, <a href="https://apps.apple.com/in/app/hdfc-bank-app-invite-only/id6504402552">click here</a>.</p>
 </body>
 </html>
