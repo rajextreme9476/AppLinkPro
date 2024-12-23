@@ -8,37 +8,37 @@
 <body>
     <script>
         function openApp() {
-            const appScheme = "HdfcNowApp://"; // Your app's custom URL scheme
+            const appScheme = "HdfcNowApp://"; // Custom app URL scheme
             const appStoreURL = "https://apps.apple.com/in/app/hdfc-bank-app-invite-only/id6504402552"; // App Store URL
-            
-            // Timeout duration for redirect (in ms)
-            const timeoutDuration = 2000; // Timeout in milliseconds (adjust as needed)
 
-            // Start the timeout
+            const timeoutDuration = 2000; // Timeout for redirecting to App Store if the app is not opened
+
+            let isAppOpened = false; // To track if the app was opened
             let timeout;
 
-            // Create an invisible iframe to attempt to open the app
-            const iframe = document.createElement("iframe");
-            iframe.style.display = "none";
-            iframe.src = appScheme;
-            document.body.appendChild(iframe);
-
-            // After a short timeout, if the app does not open, redirect to the App Store
+            // Set a timeout to redirect to App Store if app doesn't open
             timeout = setTimeout(function () {
-                window.location.href = appStoreURL;
+                if (!isAppOpened) {
+                    window.location.href = appStoreURL; // Redirect to App Store if app is not opened
+                }
             }, timeoutDuration);
 
-            // Remove the iframe after a short delay (to avoid unnecessary page reloads)
-            setTimeout(function () {
-                document.body.removeChild(iframe);
-                clearTimeout(timeout);
-            }, timeoutDuration + 100); // Adding extra time to remove the iframe
+            // Listen for visibility change to detect if the app has been opened
+            document.addEventListener("visibilitychange", function () {
+                if (document.hidden) {
+                    isAppOpened = true; // If the page becomes hidden, it means the app is launched
+                    clearTimeout(timeout); // Clear the timeout since the app opened
+                }
+            });
+
+            // Attempt to open the app via custom scheme
+            window.location.href = appScheme;
         }
 
-        // Run the function to try to open the app when the page loads
+        // Trigger the function to try to open the app when the page loads
         window.onload = openApp;
     </script>
 
-    <p>If the app does not open, <a href="https://apps.apple.com/in/app/hdfc-bank-app-invite-only/id6504402552">click here</a>.</p>
+    <p>If the app does not open, <a href="https://apps.apple.com/in/app/hdfc-bank-app-invite-only/id6504402552">click here</a> to install it.</p>
 </body>
 </html>
