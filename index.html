@@ -2,41 +2,44 @@
 <html>
 <head>
     <title>Open HDFC Bank App</title>
+</head>
+<body>
     <script>
         function openApp() {
-            const appScheme = "HdfcNowApp://"; // Your app's custom URL scheme
+            const appScheme = "HdfcNowApp://"; // Custom app scheme
             const appStoreURL = "https://apps.apple.com/in/app/hdfc-bank-app-invite-only/id6504402552";
+            let hasNavigated = false;
 
-            // Record the current time
-            const startTime = new Date().getTime();
-
-            // Use a delay to determine if the app is installed
-            setTimeout(function () {
-                const elapsedTime = new Date().getTime() - startTime;
-
-                // If elapsed time is short, assume the app is not installed and redirect
-                if (elapsedTime < 1500) {
-                    window.location.href = appStoreURL;
+            // Create a fallback timer to redirect to the App Store
+            const fallbackTimer = setTimeout(function () {
+                if (!hasNavigated) {
+                    hasNavigated = true;
+                    window.location.href = appStoreURL; // Redirect to App Store
                 }
-            }, 1500); // Adjust timeout (in milliseconds) if necessary
+            }, 1500); // Adjust the timeout as needed
 
-            // Attempt to open the app using a custom URL scheme
-            const hiddenIframe = document.createElement("iframe");
-            hiddenIframe.style.display = "none";
-            hiddenIframe.src = appScheme;
-            document.body.appendChild(hiddenIframe);
+            // Try to open the app via iframe
+            const iframe = document.createElement("iframe");
+            iframe.style.display = "none";
+            iframe.src = appScheme;
+            document.body.appendChild(iframe);
 
-            // Clean up the iframe after the timeout
-            setTimeout(() => {
-                document.body.removeChild(hiddenIframe);
+            // Listen for page visibility changes
+            document.addEventListener("visibilitychange", function () {
+                if (document.visibilityState === "hidden") {
+                    clearTimeout(fallbackTimer); // Clear fallback if app launches
+                }
+            });
+
+            // Clean up iframe after use
+            setTimeout(function () {
+                document.body.removeChild(iframe);
             }, 2000);
         }
 
-        // Call the function when the page loads
+        // Trigger the openApp function on page load
         window.onload = openApp;
     </script>
-</head>
-<body>
     <p>If you are not redirected, <a href="https://apps.apple.com/in/app/hdfc-bank-app-invite-only/id6504402552">click here</a>.</p>
 </body>
 </html>
