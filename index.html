@@ -12,10 +12,10 @@
       try {
         // Attempt to open the app using the custom scheme
         window.location.href = appScheme; 
-
       } catch (error) {
         // If an error occurs (likely due to the app not being installed),
         // redirect to the App Store
+        console.error("Error opening app:", error); 
         window.location.href = appStoreURL; 
       }
     }
