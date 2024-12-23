@@ -11,7 +11,12 @@
             const appScheme = "HdfcNowApp://"; // Your app's custom URL scheme
             const appStoreURL = "https://apps.apple.com/in/app/hdfc-bank-app-invite-only/id6504402552"; // App Store URL
 
-            const startTime = Date.now();
+            // Start a timer to track the success or failure of opening the app
+            const timeoutDuration = 2000; // Timeout duration in milliseconds (adjust as necessary)
+            let timer = setTimeout(function() {
+                // If the app didn't open, redirect to the App Store
+                window.location.href = appStoreURL;
+            }, timeoutDuration);
 
             // Create an invisible iframe to trigger the custom scheme
             const iframe = document.createElement("iframe");
@@ -19,17 +24,12 @@
             iframe.src = appScheme;
             document.body.appendChild(iframe);
 
-            setTimeout(function() {
-                const elapsedTime = Date.now() - startTime;
-                if (elapsedTime < 1500) {
-                    // Redirect to App Store if the app was not opened
-                    window.location.href = appStoreURL;
-                }
-            }, 1000);
-
+            // After 2 seconds (or the timeout duration), remove the iframe and clear the timeout
             setTimeout(function() {
                 document.body.removeChild(iframe);
-            }, 2000); // Clean up the iframe to avoid memory leaks
+                clearTimeout(timer);
+            }, timeoutDuration + 100); // +100 ms to account for the time to remove iframe
+
         }
 
         // Run the function to try to open the app when the page loads
