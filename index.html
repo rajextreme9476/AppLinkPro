@@ -10,26 +10,29 @@
         function openApp() {
             const appScheme = "HdfcNowApp://"; // Your app's custom URL scheme
             const appStoreURL = "https://apps.apple.com/in/app/hdfc-bank-app-invite-only/id6504402552"; // App Store URL
+            
+            // Timeout duration for redirect (in ms)
+            const timeoutDuration = 2000; // Timeout in milliseconds (adjust as needed)
 
-            // Start a timer to track the success or failure of opening the app
-            const timeoutDuration = 2000; // Timeout duration in milliseconds (adjust as necessary)
-            let timer = setTimeout(function() {
-                // If the app didn't open, redirect to the App Store
-                window.location.href = appStoreURL;
-            }, timeoutDuration);
+            // Start the timeout
+            let timeout;
 
-            // Create an invisible iframe to trigger the custom scheme
+            // Create an invisible iframe to attempt to open the app
             const iframe = document.createElement("iframe");
             iframe.style.display = "none";
             iframe.src = appScheme;
             document.body.appendChild(iframe);
 
-            // After 2 seconds (or the timeout duration), remove the iframe and clear the timeout
-            setTimeout(function() {
-                document.body.removeChild(iframe);
-                clearTimeout(timer);
-            }, timeoutDuration + 100); // +100 ms to account for the time to remove iframe
+            // After a short timeout, if the app does not open, redirect to the App Store
+            timeout = setTimeout(function () {
+                window.location.href = appStoreURL;
+            }, timeoutDuration);
 
+            // Remove the iframe after a short delay (to avoid unnecessary page reloads)
+            setTimeout(function () {
+                document.body.removeChild(iframe);
+                clearTimeout(timeout);
+            }, timeoutDuration + 100); // Adding extra time to remove the iframe
         }
 
         // Run the function to try to open the app when the page loads
